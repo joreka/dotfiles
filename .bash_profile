@@ -18,3 +18,6 @@ source /usr/local/bin/virtualenvwrapper.sh
 # Load .bashrc if it exists
 test -f ~/.bashrc && source ~/.bashrc
 
+
+# added by Anaconda 1.8.0 installer
+export PATH="/Users/jorgen/anaconda/bin:$PATH"

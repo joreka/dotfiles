@@ -5,7 +5,7 @@
 	     '("marmalade" . "http://marmalade-repo.org/packages/"))
 (add-to-list 'package-archives 
 	     '("melpa" . "http://melpa.milkbox.net/packages/") t)
-(package-refresh-contents)
+;;(package-refresh-contents)
 
 (defun install-if-needed (package)
   (unless (package-installed-p package)
@@ -17,7 +17,6 @@
 (mapc 'install-if-needed to-install)
 
 (add-to-list 'load-path "~/.emacs.d/custom")
-
 (load "00common-setup.el")
 (load "01yasnippet.el")
 (load "02auto-complete.el")
