@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+set -o errexit -o noclobber -o nounset -o pipefail
+
+CONFIG=$( cd "$( dirname "$0" )" && pwd )
+cd $CONFIG
+
+EXCLUDED=FILES.exclude
+DEST=~
+
+
+install_files()
+{
+    cd $CONFIG
+    rsync --exclude-from=$EXCLUDED -av --no-perms . $DEST
+}
+
+
+usage()
+{
+cat <<EOF
+usage: config [ -h ] -i 
+  
+     Options:
+      
+     -h      this help text
+     -i      install config files in \$HOME=$HOME   
+
+EOF
+}
+
+
+CMD=
+OPTIND=1 # Reset is necessary if getopts was used previously in the script.
+while getopts "hi3:" opt; do
+    case $opt in
+        h)
+            usage
+            exit 0
+            ;;
+        i)  
+            CMD="install"
+            ;;
+        3)  
+            echo "THREE: $OPTARG"
+            ;;
+        
+        \?) 
+            usage >&2 
+            exit 1
+            ;;
+    esac
+done
+shift $((OPTIND-1)) # Shift off the options and optional --.
+dotfile=${1:-""}
+
+
+case $CMD in
+    install)
+        install_files
+        ;;
+    *)
+        echo $0: missing option 
+        usage
+        ;;
+esac
+
+
+
+
+
+
+
+
+
+
+
+
+
+

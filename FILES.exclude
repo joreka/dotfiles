@@ -1,0 +1,7 @@
+FILES.exclude
+README.md
+config
+bin
+.git
+#.emacs.d
+#.bash_profile
