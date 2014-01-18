@@ -9,6 +9,22 @@ EXCLUDED=FILES.exclude
 DEST=~
 
 
+check_files()
+{
+    ALL_FILES=$(rsync --dry-run --existing --exclude-from=$EXCLUDED -a . | awk '{print $5}') 
+    for f in $ALL_FILES; do
+        if [ -f ~/$f ]; then     
+            if [ ~/$f -nt $f ]; then
+                echo "~/$f is newer"
+            fi
+            if [ $(stat -f "%Sp" ~/$f) != "$(stat -f "%Sp" $f)" ]; then 
+                echo "~/$f permissions differ"
+            fi
+            diff -q ~/$f $f
+        fi
+    done
+}
+
 install_files()
 {
     cd $CONFIG
@@ -19,12 +35,13 @@ install_files()
 usage()
 {
 cat <<EOF
-usage: config [ -h ] -i 
+usage: config [ -h ] ( -i | -c )
   
      Options:
       
      -h      this help text
      -i      install config files in \$HOME=$HOME   
+     -c      check config files
 
 EOF
 }
@@ -32,7 +49,7 @@ EOF
 
 CMD=
 OPTIND=1 # Reset is necessary if getopts was used previously in the script.
-while getopts "hi3:" opt; do
+while getopts "hic3:" opt; do
     case $opt in
         h)
             usage
@@ -40,6 +57,9 @@ while getopts "hi3:" opt; do
             ;;
         i)  
             CMD="install"
+            ;;
+        c)  
+            CMD="check"
             ;;
         3)  
             echo "THREE: $OPTARG"
@@ -58,6 +78,9 @@ dotfile=${1:-""}
 case $CMD in
     install)
         install_files
+        ;;
+    check)
+        check_files
         ;;
     *)
         echo $0: missing option 

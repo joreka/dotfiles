@@ -7,6 +7,9 @@
 ;; Do not show startup message
 (setq inhibit-startup-message t)    
 
+;; Disable beep when scrolling beyond the end of document
+(setq ring-bell-function 'ignore)
+
 ;; y/n instead of yes/no
 (defalias 'yes-or-no-p 'y-or-n-p)              
 
