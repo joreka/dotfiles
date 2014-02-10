@@ -47,8 +47,15 @@
 (show-paren-mode t)                   ; Show matching parenthesis
 (setq line-number-mode t)             ; Show line
 (setq column-number-mode t)           ; Show columns
-(mouse-wheel-mode t)                  ; Enable mouse wheel scrolling
 (setq visible-bell nil)               ; Turn beep off
+
+;; Mouse wheel scrolling
+(mouse-wheel-mode t)                  ; Enable mouse wheel scrolling
+(when (eq system-type 'darwin) ;; mac specific settings
+  (setq mouse-wheel-scroll-amount '(2 ((shift) . 1)))
+  (setq mouse-wheel-progressive-speed nil) 
+  (setq mouse-wheel-follow-mouse 't) 
+  )
 
 ; Enable backup files.
 (setq make-backup-files t)
