@@ -17,10 +17,12 @@ check_files()
             if [ ~/$f -nt $f ]; then
                 echo "~/$f is newer"
             fi
-            if [ $(stat -f "%Sp" ~/$f) != "$(stat -f "%Sp" $f)" ]; then 
-                echo "~/$f permissions differ"
-            fi
+            #if [ $(stat -f "%Sp" ~/$f) != "$(stat -f "%Sp" $f)" ]; then 
+            #    echo "~/$f permissions differ"
+            #fi
             diff -q ~/$f $f
+	else
+	   echo "~/$f is missing"
         fi
     done
 }
