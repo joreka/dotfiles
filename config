@@ -11,18 +11,22 @@ DEST=~
 
 check_files()
 {
-    ALL_FILES=$(rsync --dry-run --existing --exclude-from=$EXCLUDED -a . | awk '{print $5}') 
+    ALL_FILES=$(rsync --dry-run --existing --exclude-from=$EXCLUDED -a . | awk '{print $5}')
     for f in $ALL_FILES; do
-        if [ -f ~/$f ]; then     
-            if [ ~/$f -nt $f ]; then
-                echo "~/$f is newer"
+        if [ "$f" != "." ]; then
+            if [ -e ~/$f ]; then
+                if [ ~/$f -nt $f ]; then
+                    echo "~/$f is newer"
+                fi
+                #if [ $(stat -f "%Sp" ~/$f) != "$(stat -f "%Sp" $f)" ]; then
+                #    echo "~/$f permissions differ"
+                #fi
+                if [ -f $f ]; then
+                    diff -u ~/$f $f
+                fi
+	    else
+	        echo "~/$f is missing"
             fi
-            #if [ $(stat -f "%Sp" ~/$f) != "$(stat -f "%Sp" $f)" ]; then 
-            #    echo "~/$f permissions differ"
-            #fi
-            diff -q ~/$f $f
-	else
-	   echo "~/$f is missing"
         fi
     done
 }
@@ -38,11 +42,11 @@ usage()
 {
 cat <<EOF
 usage: config [ -h ] ( -i | -c )
-  
+
      Options:
-      
+
      -h      this help text
-     -i      install config files in \$HOME=$HOME   
+     -i      install config files in \$HOME=$HOME
      -c      check config files
 
 EOF
@@ -57,18 +61,18 @@ while getopts "hic3:" opt; do
             usage
             exit 0
             ;;
-        i)  
+        i)
             CMD="install"
             ;;
-        c)  
+        c)
             CMD="check"
             ;;
-        3)  
+        3)
             echo "THREE: $OPTARG"
             ;;
-        
-        \?) 
-            usage >&2 
+
+        \?)
+            usage >&2
             exit 1
             ;;
     esac
@@ -85,21 +89,7 @@ case $CMD in
         check_files
         ;;
     *)
-        echo $0: missing option 
+        echo $0: missing option
         usage
         ;;
 esac
-
-
-
-
-
-
-
-
-
-
-
-
-
-
