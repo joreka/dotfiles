@@ -1,4 +1,6 @@
 
+export TERM='xterm-color'
+
 # Set architecture flags
 export ARCHFLAGS="-arch x86_64"
 
@@ -32,6 +34,13 @@ fi
 
 # Load .bashrc if it exists
 test -f ~/.bashrc && source ~/.bashrc
+
+# Tell ls to be colourful
+export CLICOLOR=1
+export LSCOLORS=gxfxbEaEBxxEhEhBaDaCaD
+
+# Tell grep to highlight matches
+export GREP_OPTIONS='--color=auto'
 
 # Add tab completion for SSH hostnames based on ~/.ssh/config, ignoring wildcards
 [ -e "$HOME/.ssh/config" ] && complete -o "default" -o "nospace" -W "$(grep "^Host" ~/.ssh/config | grep -v "[?*]" | cut -d " " -f2 | tr ' ' '\n')" scp sftp ssh
